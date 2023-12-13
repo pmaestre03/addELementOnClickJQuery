@@ -25,10 +25,28 @@ function onDeviceReady() {
     // Cordova is now initialized. Have fun!
     console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
     $("#button").on("click", function() {
-        console.log("click")
-        addElement()
+        let pagina = prompt("Pagina a añadir");
+        addElement(pagina)
     })
-    function addElement() {
-        $("ul").append("<li>NOU ELEMENT</li>")
+    function addElement(pagina) {
+        $("ul").append("<li><a href='#"+pagina+"'>"+pagina+"</a></li>")
+        $("ul").listview( "refresh" );
+        createDiv(pagina)
+    }
+    function createDiv(pagina) {
+        addDiv =
+        '<div data-role="page" id="'+pagina+'" data-url="'+pagina+'">'+
+            '<div data-role="header">'+
+                '<a href="#" data-icon="back" data-rel="back" title="Go back">Back</a>'+
+                '<h1>'+pagina+'</h1>'+
+            '</div>'+
+            '<div class="ui-content">'+
+                '<p>This is '+pagina+'</p>'+
+            '</div>'+
+            '<div data-role="footer" data-position="fixed">'+
+                '<h1>'+pagina+'</h1>'+
+            '</div>'+
+        '</div>'
+        $("body").append(addDiv)
     }
 }
