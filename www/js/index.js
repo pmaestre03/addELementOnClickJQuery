@@ -29,7 +29,7 @@ function onDeviceReady() {
         addElement(pagina)
     })
     function addElement(pagina) {
-        $("ul").append("<li><a href='#"+pagina+"'>"+pagina+"</a></li>")
+        $("ul").append("<li><a href='#"+pagina+"'>"+pagina+"</a><a class='delete' data-icon='delete'></a></li>")
         $("ul").listview( "refresh" );
         createDiv(pagina)
     }
@@ -49,4 +49,9 @@ function onDeviceReady() {
         '</div>'
         $("body").append(addDiv)
     }
+    $('ul').on('click', '.delete', function(event) {
+        var caller = event.target || event.srcElement;
+        console.log( caller );
+        caller.closest("li").remove();
+    });
 }
