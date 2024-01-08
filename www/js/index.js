@@ -51,7 +51,7 @@ function onDeviceReady() {
     }
     $('ul').on('click', '.delete', function(event) {
         var caller = event.target || event.srcElement;
-        console.log( caller );
+        // console.log( caller );
         caller.closest("li").remove();
     });
 }
