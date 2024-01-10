@@ -24,34 +24,47 @@ document.addEventListener('deviceready', onDeviceReady, false);
 function onDeviceReady() {
     // Cordova is now initialized. Have fun!
     console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
-    $("#button").on("click", function() {
+    $("#button").on("click", function () {
         let pagina = prompt("Pagina a añadir");
         addElement(pagina)
     })
     function addElement(pagina) {
-        $("ul").append("<li><a href='#"+pagina+"'>"+pagina+"</a><a class='delete' data-icon='delete'></a></li>")
-        $("ul").listview( "refresh" );
+        let nuevoElemento = $('<li><a href="#' + pagina + '">' + pagina + '</a><a class="edit ui-btn ui-btn-icon-notext ui-icon-edit" data-icon="edit"></a><a class="delete" data-icon="delete"></a></li>');
+        $("ul").append(nuevoElemento).listview("refresh")
         createDiv(pagina)
     }
     function createDiv(pagina) {
         addDiv =
-        '<div data-role="page" id="'+pagina+'" data-url="'+pagina+'">'+
-            '<div data-role="header">'+
-                '<a href="#" data-icon="back" data-rel="back" title="Go back">Back</a>'+
-                '<h1>'+pagina+'</h1>'+
-            '</div>'+
-            '<div class="ui-content">'+
-                '<p>This is '+pagina+'</p>'+
-            '</div>'+
-            '<div data-role="footer" data-position="fixed">'+
-                '<h1>'+pagina+'</h1>'+
-            '</div>'+
-        '</div>'
+            '<div data-role="page" id="' + pagina + '" data-url="' + pagina + '">' +
+            '<div data-role="header">' +
+            '<a href="#" data-icon="back" data-rel="back" title="Go back">Back</a>' +
+            '<h1>' + pagina + '</h1>' +
+            '</div>' +
+            '<div class="ui-content">' +
+            '<p>This is ' + pagina + '</p>' +
+            '</div>' +
+            '<div data-role="footer" data-position="fixed">' +
+            '<h1>' + pagina + '</h1>' +
+            '</div>' +
+            '</div>'
         $("body").append(addDiv)
     }
-    $('ul').on('click', '.delete', function(event) {
+    $('ul').on('click', '.delete', function (event) {
         var caller = event.target || event.srcElement;
-        console.log( caller );
+        // console.log( caller );
         caller.closest("li").remove();
     });
+    function editElement(pagina) {
+        let nuevoTexto = prompt("Nuevo texto para "+pagina);
+        if (nuevoTexto) {
+            $(`a[href='#${pagina}']`).text(nuevoTexto);
+        }
+    }
+    
+    $('ul').on('click', '.edit', function(event) {
+        var caller = event.target || event.srcElement;
+        var pagina = $(caller).closest("li").find("a:first").attr("href").substring(1);
+        editElement(pagina);
+    });
+    
 }
