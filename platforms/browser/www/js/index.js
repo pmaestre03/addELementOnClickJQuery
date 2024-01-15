@@ -56,9 +56,8 @@ function onDeviceReady() {
     $('ul').on('click', '.delete', function (event) {
         var caller = event.target || event.srcElement;
         // console.log( caller );
-        var pagina = $(caller).closest("li").find("a:first").attr("href").substring(1);
-        console.log(pagina)
         caller.closest("li").remove();
+        borrarElemento($(caller).closest("li").find("a:first").attr("href").substring(1))
     });
     function editElement(pagina) {
         let nuevoTexto = prompt("Nuevo texto para " + pagina);
@@ -68,12 +67,32 @@ function onDeviceReady() {
     }
     function cargarPagina() {
         var longitudModel = model.length;
-        if (longitudModel!=0) {
+        if (longitudModel != 0) {
             for (let i = 0; i < longitudModel; i++) {
                 addElement(model[i]);
             }
         }
     }
+    function borrarElemento(pagina) {
+        // Buscar la posición del elemento en el array
+        var indice = model.indexOf(pagina);
+    
+        // Verificar si el elemento se encuentra en el array
+        if (indice !== -1) {
+            // Eliminar el elemento del array
+            model.splice(indice, 1);
+    
+            // Actualizar el localStorage después de modificar el array
+            localStorage.setItem("model", JSON.stringify(model));
+    
+            // También puedes realizar otras acciones necesarias aquí
+    
+            console.log('Elemento borrado:', pagina);
+        } else {
+            console.log('Elemento no encontrado en el array:', pagina);
+        }
+    }
+    
     $('ul').on('click', '.edit', function (event) {
         var caller = event.target || event.srcElement;
         var pagina = $(caller).closest("li").find("a:first").attr("href").substring(1);
