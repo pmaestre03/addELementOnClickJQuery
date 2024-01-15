@@ -22,18 +22,22 @@
 document.addEventListener('deviceready', onDeviceReady, false);
 
 function onDeviceReady() {
+    var model = JSON.parse(localStorage.getItem("model")) || []
     // Cordova is now initialized. Have fun!
     console.log('Running cordova-' + cordova.platformId + '@' + cordova.version);
+    cargarPagina();
     $("#button").on("click", function () {
         let pagina = prompt("Pagina a añadir");
         addElement(pagina)
+        createDiv(pagina)
     })
     function addElement(pagina) {
         let nuevoElemento = $('<li><a href="#' + pagina + '">' + pagina + '</a><a class="edit ui-btn ui-btn-icon-notext ui-icon-edit" data-icon="edit"></a><a class="delete" data-icon="delete"></a></li>');
         $("ul").append(nuevoElemento).listview("refresh")
-        createDiv(pagina)
     }
     function createDiv(pagina) {
+        model.push(pagina);
+        localStorage.setItem("model", JSON.stringify(model));
         addDiv =
             '<div data-role="page" id="' + pagina + '" data-url="' + pagina + '">' +
             '<div data-role="header">' +
@@ -52,19 +56,27 @@ function onDeviceReady() {
     $('ul').on('click', '.delete', function (event) {
         var caller = event.target || event.srcElement;
         // console.log( caller );
+        var pagina = $(caller).closest("li").find("a:first").attr("href").substring(1);
+        console.log(pagina)
         caller.closest("li").remove();
     });
     function editElement(pagina) {
-        let nuevoTexto = prompt("Nuevo texto para "+pagina);
+        let nuevoTexto = prompt("Nuevo texto para " + pagina);
         if (nuevoTexto) {
             $(`a[href='#${pagina}']`).text(nuevoTexto);
         }
     }
-    
-    $('ul').on('click', '.edit', function(event) {
+    function cargarPagina() {
+        var longitudModel = model.length;
+        if (longitudModel!=0) {
+            for (let i = 0; i < longitudModel; i++) {
+                addElement(model[i]);
+            }
+        }
+    }
+    $('ul').on('click', '.edit', function (event) {
         var caller = event.target || event.srcElement;
         var pagina = $(caller).closest("li").find("a:first").attr("href").substring(1);
         editElement(pagina);
     });
-    
 }
